@@ -4,7 +4,7 @@ import TheMail from "./src/entity/TheMail.js"
 
 
 
-var transporter = createTransport({
+ var transporter = createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
   port: 465,
@@ -32,8 +32,8 @@ let mailOptions = new TheMail(
 
 transporter.sendMail(mailOptions, function(error, info){
   if (error) {
-    console.log(error);
+    throw new Error(error)
   } else {
-    console.log('Email sent: ' + info.response);
+    return('Email sent successfully');
   }
 });

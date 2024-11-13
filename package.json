@@ -4,7 +4,7 @@
   "main": "nodemailer.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test":    "mocha test/**/*.test.mjs"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,12 @@
   "homepage": "https://github.com/SalomiaZK/NodeMailer#readme",
   "description": "",
   "dependencies": {
-    "chai": "^5.1.2",
     "dotenv": "^16.4.5",
-    "mocha": "^10.8.2",
     "nodemailer": "^6.9.16"
+  },
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "mocha": "^10.8.2",
+    "sinon": "^19.0.2"
   }
 }
