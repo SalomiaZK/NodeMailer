@@ -1,0 +1,26 @@
+{
+  "name": "jenny",
+  "version": "1.0.0",
+  "main": "nodemailer.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SalomiaZK/NodeMailer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SalomiaZK/NodeMailer/issues"
+  },
+  "homepage": "https://github.com/SalomiaZK/NodeMailer#readme",
+  "description": "",
+  "dependencies": {
+    "chai": "^5.1.2",
+    "dotenv": "^16.4.5",
+    "mocha": "^10.8.2",
+    "nodemailer": "^6.9.16"
+  }
+}
