@@ -1,0 +1,5 @@
+"scripts": {
+  "start": "concurrently --names \"server,react\" \"npm run start-server\" \"npm run start-react\""
+}
+
+POST sisa de le mandefa an le mail

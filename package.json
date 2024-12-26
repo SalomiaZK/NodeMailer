@@ -4,7 +4,11 @@
   "main": "nodemailer.js",
   "type": "module",
   "scripts": {
-    "test":    "mocha test/**/*.test.mjs"
+    "test": "mocha test/**/*.test.mjs", 
+    "React" : "cd react && npm run dev", 
+    "Nest" : "cd jmail-back && ", 
+    "start" : "concurently \" npm run React\" \"npm run Nest\" "
+    
   },
   "repository": {
     "type": "git",
@@ -19,6 +23,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "imap": "^0.8.19",
     "nodemailer": "^6.9.16"
   },
   "devDependencies": {
