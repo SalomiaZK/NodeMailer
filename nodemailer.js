@@ -3,7 +3,6 @@ import 'dotenv/config';  // Charge automatiquement le fichier .env
 import TheMail from "./src/entity/TheMail.js"
 
 
-
  var transporter = createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
