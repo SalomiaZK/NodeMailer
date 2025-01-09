@@ -4,7 +4,6 @@ import { Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 export class MailEntity{
     @PrimaryGeneratedColumn()
    id_mail: string;
-
     @Column()
     from : string;
 

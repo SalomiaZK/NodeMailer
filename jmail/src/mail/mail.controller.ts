@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailEntity } from './mail.entity';
 
@@ -12,6 +12,9 @@ export class MailsController {
     async findAll() : Promise<MailEntity[]>{
         return this.mailService.findAll()
      }
+
+     @Post("send")
+     async sendMail (@Body() toSend : MailEntity) : Promise <Object>{
+        return this.mailService.sendMail(toSend)
+     }
 }
-
-
