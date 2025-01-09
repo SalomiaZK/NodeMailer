@@ -14,7 +14,7 @@ export class MailService {
           @InjectRepository(MailEntity) // injection de dependance
           private mailRepository: Repository<MailEntity>
      ) {
-          this.transporter = nodemailer.createTransporter({
+          this.transporter = nodemailer.createTransport({
                service: 'gmail',
                host: 'smtp.gmail.com',
                port: 465,
