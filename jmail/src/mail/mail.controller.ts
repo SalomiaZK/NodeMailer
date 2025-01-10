@@ -13,6 +13,11 @@ export class MailsController {
         return this.mailService.findAll()
      }
 
+     @Get("newMessages")
+     async findNewMessages () : Promise<MailEntity[]>{
+         return this.findNewMessages();
+     } 
+
      @Post("send")
      async sendMail (@Body() toSend : MailEntity) : Promise <Object>{
         return this.mailService.sendMail(toSend)
