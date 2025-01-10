@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailEntity } from './mail.entity';
+import { CreateMailDto } from 'src/dto/createMailDto';
 
 @Controller('mails')
 export class MailsController {
@@ -19,7 +20,7 @@ export class MailsController {
      } 
 
      @Post("send")
-     async sendMail (@Body() toSend : MailEntity) : Promise <Object>{
+     async sendMail (@Body() toSend : CreateMailDto) : Promise <Object>{
         return this.mailService.sendMail(toSend)
      }
 }

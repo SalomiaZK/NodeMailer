@@ -4,17 +4,20 @@ import { MailEntity } from './mail.entity';
 import { Repository } from 'typeorm';
 import * as nodemailer from 'nodemailer'
 import { dotenvValues } from 'src/config/env.config';
-import * as Imap from "imap-simple" 
+import * as Imap from "imap-simple"
+import { CreateMailDto } from 'src/dto/createMailDto';
+import { v4 as uuidv4 } from 'uuid';
+import 'dotenv/config';  // Charge automatiquement le fichier .env
 
 
 @Injectable()
 export class MailService {
      private transporter: nodemailer.Transporter
-      // cree 
+     // cree 
      private config = {
-          imap : {
+          imap: {
                user: dotenvValues.forwader,
-               password : dotenvValues.password,
+               password: dotenvValues.password,
                host: 'imap.gmail.com',
                port: 993,
                tls: true
@@ -37,49 +40,65 @@ export class MailService {
           })
 
      }
+
+
+
+
      async findAll(): Promise<MailEntity[]> {
           return this.mailRepository.find()
      }
-     async sendMail(toSend: MailEntity): Promise<Object> {
-          const mailOption = {
-               "from": dotenvValues.forwader,
-               to: toSend.to,
+     async sendMail(toSend: CreateMailDto): Promise<Object> {
+
+          let theMailTobeSent = new MailEntity(
+               uuidv4(),
+               dotenvValues.forwader,
+               toSend.to,
+               "sent",
+               toSend.subject,
+               toSend.text
+          )
+
+          const maiOption = {
+               from: dotenvValues.forwader,
+               to : toSend.to,
                subject: toSend.subject,
                text: toSend.text
-
           }
+
+           
           try {
-               const info = await this.transporter.sendMail(mailOption)
-                    this.mailRepository.create(toSend)
+               const info = await this.transporter.sendMail(maiOption)
+               this.mailRepository.create(theMailTobeSent)
                return {
                     "status": "email sent" + info.messageId,
-                    "mail": toSend
+                    "mail": theMailTobeSent
 
                }
 
 
 
-          } catch (error){
-               console.error('error sending the mail :' , error)
-               throw new Error('L\'email n\'a pas pu être envoyé'); // Remonte l'erreur
+          } catch (error) {
+               console.log(process.env.FORWADER_EMAIL)
+               console.error('error sending the mail :', error)
+               throw new Error('L\'email n\'a pas pu être envoyé');
           }
 
 
      }
 
-     async checkNewEmails (){
-          try{
+     async checkNewEmails() {
+          try {
 
                let newEmails = []
                const connection = await Imap.connect(this.config)
 
                await connection.openBox("INBOX")
-               const messages =await connection.search(["UNSEEN"], {
+               const messages = await connection.search(["UNSEEN"], {
                     bodies: ['HEADER FIELD (FROM TO SUBJECT DATE)', 'TEXT']
                })
 
 
-               for(const message of messages){
+               for (const message of messages) {
                     const email = {
                          subject: message.parts[0].body.subject[0],
                          from: message.parts[0].body.from[0],
@@ -93,7 +112,7 @@ export class MailService {
                     return newEmails
                }
                connection.end()
-          }catch(error){
+          } catch (error) {
                console.error("error pendant la recuperation des messages")
           }
      }
