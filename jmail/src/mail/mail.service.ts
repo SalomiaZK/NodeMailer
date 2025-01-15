@@ -7,8 +7,9 @@ import { dotenvValues } from 'src/config/env.config';
 import * as Imap from "imap-simple"
 import { CreateMailDto } from 'src/dto/createMailDto';
 import { v4 as uuidv4 } from 'uuid';
-import 'dotenv/config';  // Charge automatiquement le fichier .env
+import { ConfigService } from '@nestjs/config';
 
+// Charger le fichier .env à partir du sous-dossier config
 
 @Injectable()
 export class MailService {
@@ -25,6 +26,7 @@ export class MailService {
      }
 
      constructor(
+          private readonly configService : ConfigService,
           @InjectRepository(MailEntity) // injection de dependance
           private mailRepository: Repository<MailEntity>
      ) {
@@ -78,9 +80,8 @@ export class MailService {
 
 
           } catch (error) {
-               console.log(process.env.FORWADER_EMAIL)
-               console.error('error sending the mail :', error)
-               throw new Error('L\'email n\'a pas pu être envoyé');
+               console.log("password",this.configService.get<string>('DATABASE_PASSWORD'))
+               console.log("config", this.configService.get<string>('PASSWORD'))
           }
 
 
