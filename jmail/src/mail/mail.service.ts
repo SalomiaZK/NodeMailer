@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MailEntity } from './mail.entity';
 import { Repository } from 'typeorm';
 import * as nodemailer from 'nodemailer'
-import { dotenvValues } from 'src/config/env.config';
 import * as Imap from "imap-simple"
 import { CreateMailDto } from 'src/dto/createMailDto';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,11 +16,12 @@ export class MailService {
      // cree 
      private config = {
           imap: {
-               user: dotenvValues.forwader,
-               password: dotenvValues.password,
+               user: this.configService.get<string>('FORWARDER_EMAIL'),
+               password: this.configService.get<string>('PASSWORD'),
                host: 'imap.gmail.com',
                port: 993,
-               tls: true
+               tls: true,
+
           }
      }
 
@@ -31,13 +31,12 @@ export class MailService {
           private mailRepository: Repository<MailEntity>
      ) {
           this.transporter = nodemailer.createTransport({
-               service: 'gmail',
                host: 'smtp.gmail.com',
                port: 465,
                secure: true,
                auth: {
-                    user: dotenvValues.forwader,
-                    pass: dotenvValues.password
+                    user: this.configService.get<string>('FORWARDER_EMAIL'),
+                    pass: this.configService.get<string>('PASSWORD')
                }
           })
 
@@ -53,7 +52,7 @@ export class MailService {
 
           let theMailTobeSent = new MailEntity(
                uuidv4(),
-               dotenvValues.forwader,
+               this.configService.get<string>('FORWARDER_EMAIL'),
                toSend.to,
                "sent",
                toSend.subject,
@@ -61,7 +60,7 @@ export class MailService {
           )
 
           const maiOption = {
-               from: dotenvValues.forwader,
+               from: this.configService.get<string>('FORWARDER_EMAIL'),
                to : toSend.to,
                subject: toSend.subject,
                text: toSend.text
@@ -80,8 +79,7 @@ export class MailService {
 
 
           } catch (error) {
-               console.log("password",this.configService.get<string>('DATABASE_PASSWORD'))
-               console.log("config", this.configService.get<string>('PASSWORD'))
+               throw new Error( error)
           }
 
 
@@ -110,11 +108,13 @@ export class MailService {
                     await this.mailRepository.save(email)
                     newEmails.push(email)
 
-                    return newEmails
                }
                connection.end()
+
+               return newEmails
+
           } catch (error) {
-               console.error("error pendant la recuperation des messages")
+               console.error("error pendant la recuperation des messages" , error)
           }
      }
 }

@@ -16,7 +16,7 @@ export class MailsController {
 
      @Get("newMessages")
      async findNewMessages () : Promise<MailEntity[]>{
-         return this.findNewMessages();
+         return this.mailService.checkNewEmails();
      } 
 
      @Post("send")
